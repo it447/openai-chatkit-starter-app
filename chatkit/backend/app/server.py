@@ -19,24 +19,17 @@ MODEL = "gpt-4o-mini"
 
 # Initialize OpenAI client and create/retrieve an agent so the model
 # parameter is explicitly provided to the API requests.
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-
-# If an assistant/agent ID is provided, retrieve it (Assistants API).
-ASSISTANT_ID = os.environ.get("OPENAI_ASSISTANT_ID")
-if ASSISTANT_ID:
-    assistant_agent = client.beta.assistants.retrieve(ASSISTANT_ID)
-else:
-    # Create a lightweight agent backing the Starter Assistant so the
-    # model parameter is included in subsequent calls.
-    assistant_agent = client.agents.create(
-        model=MODEL,
-        name="Starter Assistant",
-        instructions=(
-            "You are a concise, helpful assistant. "
-            "Keep replies short and focus on directly answering "
-            "the user's request."
-        ),
-    )
+# Construct an Agent with an explicit `model` so API calls include it.
+# The OpenAI API key should be provided via `OPENAI_API_KEY` in the environment.
+assistant_agent = Agent[AgentContext[dict[str, Any]]](
+    model=MODEL,
+    name="Starter Assistant",
+    instructions=(
+        "You are a concise, helpful assistant. "
+        "Keep replies short and focus on directly answering "
+        "the user's request."
+    ),
+)
 
 
 class StarterChatServer(ChatKitServer[dict[str, Any]]):

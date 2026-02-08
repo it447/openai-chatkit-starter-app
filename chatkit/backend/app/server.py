@@ -14,7 +14,7 @@ from agents import Agent
 
 
 MAX_RECENT_ITEMS = 30
-MODEL = "gpt-4.1-mini"
+MODEL = "gpt-4o-mini"
 
 
 assistant_agent = Agent[AgentContext[dict[str, Any]]](
